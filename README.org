@@ -11,6 +11,8 @@ Feel free to use the data as you like.
 The repository further includes scripts for bootstrapping statistical values.
 Have a look in =statistics= for further information
 
+[[https://zenodo.org/badge/latestdoi/485048841][https://zenodo.org/badge/485048841.svg?style=svg]]
+
 * RAW
 ** Study David
 In this study, speech recognition thresholds and psychoacoustic detection thresholds were measured.
