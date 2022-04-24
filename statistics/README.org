@@ -1,0 +1,55 @@
+#+TITLE: Statistics scripts collection
+
+* Bootstrapping
+All of these functions are used for bootstrapping something.
+For details, see the explanation below
+- Definitions:
+  + 95th confidence interval: 2.5th and 97.5th percentiles
+
+** statistical_analysis.m
+- function that bootstraps...
+  + the squared Pearsons correlation coefficient R², i.e., the coefficient of determination
+  + the bias of the data
+  + the RMSE of the data
+- Usage
+#+begin_src octave
+% exemplary data
+data_predicted = randn(1000,1);
+data_expected  = randn(1000,1)*2 + 5;
+number_of_bootstraps = 1000;
+[r2, p, bias, rms] = statistical_analysis(data_predicted, data_expected, number_of_bootstraps);
+printf('Model | R2 [L U] | bias [L U] | rmse [L U]\n');
+printf('%s | %0.2f [%0.2f %0.2f] | %+2.1f [%+2.1f %+2.1f] | %2.1f [%2.1f %2.1f]\n', '<modle name>', r2(1), r2(2), r2(3), bias(1), bias(2), bias(3), rms(1), rms(2), rms(3));
+#+end_src
+
+** comparative_analysis*.m
+- function for comparing two models with R², bias, and RMSE
+- there is a one-sided and a two-sided implementation of this function
+- Usage (ex. for one-sided imp.)
+#+begin_src octave
+% exemplary data
+data_model_a   = randn(1000,1);
+data_model_b   = randn(1000,1)*2 + 8;
+data_expected  = randn(1000,1)*2 + 5;
+number_of_bootstraps = 1000;
+[r2_p, bias_p, rms_p] = comparative_analysis_one_sided(data_expected, data_model_a, data_model_b, number_of_bootstraps);
+printf('A vs. B | p_R2 | p_bias | p_RMSE\n');
+printf('%s vs. %s | %0.4f | %0.4f | %0.4f\n', 'A', 'B', r2_p, bias_p, rms_p);
+#+end_src
+
+** bootstrap_fit_nd.m
+- function of fitting a function to data while bootstrapping the fit parameters (linear at the moment)
+  + fits are made on random samples of the data
+  + Parameters are estimated for each run
+  + Output: mean, standard deviation, median, percentiles of the parameters
+- Usage
+#+begin_src octave
+% exemplary data
+xdata = randn(1000,1);
+ydata = xdata + randn(size(xdata))*0.2 + 4;
+out = bootstrap_fit_nd(ydata, xdata, number_of_bootstraps);
+% use mean values for the fit
+plot(xdata, xdata*out(1,1)+out(1,2),'o*', 'cyan');
+#+end_src
+*** linfun_n_dim_1st_order.m
+- linear, n dimensional first order polynomial function

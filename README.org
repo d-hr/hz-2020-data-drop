@@ -1,0 +1,175 @@
+#+TITLE: Explanation of measurements
+#+AUTHOR: David Hülsmeier
+#+EMAIL: david.huelsmeier@uol.de
+#+DATE: 2021-11-08
+#+LANGUAGE: en
+
+This repository contains the data collected by Marc René Schädler and David Hülsmeier in two Hörzentrum Studies that started in 2019 and ended in 2020.
+Both data sets were simulated with FADE (and DARF), but the files required for the simulations are not included here (yet).
+Feel free to use the data as you like.
+
+The repository further includes scripts for bootstrapping statistical values.
+Have a look in =statistics= for further information
+
+* RAW
+** Study David
+In this study, speech recognition thresholds and psychoacoustic detection thresholds were measured.
+The aim was to support the theoretical assumptions from [[https://doi.org/10.1016/j.heares.2020.107995][Hülsmeier et al. (2020)]] by running the same measurements with listeners.
+
+*** Clinical measurements
+**** Clinical Audiogram
+The classical clinical audiogram measured with an audiometer.
+
+*** Psychoacoustic measurements
+**** Tone in quiet
+Pure tones presented in quiet, measured adaptively with the SIAM procedure proposed by [[https://doi.org/10.1121/1.399985][Kaernbach et al. (1994)]] (see also [[https://github.com/m-r-s/measurement-prediction-framework][Essential Measurements Application]] for the various scripts)
+#+caption: Tone in quiet
+#+attr_html: :alt  :align left :class img
+[[./figures/A.png]]
+
+- Frequencies 250, 500, 750, 1000, 2000, 4000, 6000 Hz
+
+**** Sweeps in quiet
+Same measurement as the "Tone in Quiet" measurement, but with narrow band sweeps
+#+caption: Sweeps in quiet
+#+attr_html: :alt  :align left :class img
+[[./figures/SA.png]]
+
+- Frequencies 250, 500, 750, 1000, 2000, 4000, 6000 Hz
+
+**** Tones in notched noise
+Measurement to get the size of the auditory filters, see [[https://doi.org/10.1121/1.380914][Patterson (1976)]]
+#+caption: Tone in notched noise
+#+attr_html: :alt  :align left :class img
+[[./figures/TINN.png]]
+
+- Center frequencies: 500 and 1000 Hz
+- notch widths 0.0, 0.1, 0.2, 0.3 * Center frequency
+- Noise spectrum level: 50 dB SPL
+
+**** Tones in broadband/plateau noise
+Measurement to assess supra-threshold parameters, see [[https://doi.org/10.1016/j.heares.2020.107995][Hülsmeier et al. (2020)]], and/or [[https://doi.org/10.1177%2F2331216520938929][Schädler et al. (2020)]]
+#+caption: Tone in broadband noise
+#+attr_html: :alt  :align left :class img
+[[./figures/TIBN.png]]
+
+This measurement was performed at individual noise levels, that depended on the sweep in quiet detection thresholds at the respective frequency.
+- Frequencies: 500, 1000, 2000, 4000 Hz
+- The level of the noise was individual, but limited to 35 to 55 dB spectrum level.
+  To convert dB spectrum level to dB SPL, use following formular:
+  =L_{SPL} = L_{spectrum} + 20*log10(sqrt(bw))=,
+  where =bw= is the bandwidth of the noise signal.
+  It was set to exceed the absolute hearing threshold by 10 dB, which did not work out for each listener due to the maximum of 55 dB spectrum level (i.e. 93 dB SPL at 4 kHz).
+
+*** Speech recognition measurements
+SRTs were measured in different acoustic environments:
+- Quiet,
+- Icra1m (stationary),
+- Icra5-250m (fluctuating), and
+- Multitalker babble (multitalker).
+All measurement were performed at 65 dB SPL, but the measurements in the stationary masker were additionally performed 15 and 25 dB above the average hearing loss in dB SPL for frequencies less than or equal to 1 kHz.
+
+** Study Marc
+*** Clinical audiogram
+See above
+
+*** Psychoacoustic measurements
+**** Tone in quiet
+Actually, the scripts for the measurement are titled =measure_sweep.m= and =gensweep.m=, but the sweeps upper and lower frequency are equal, resulting in a perceived tone;)
+
+**** Tone in broadband noise
+Same logic applies as for the tone in quiet measurement: script names include =sweepinnoise=.
+
+*** Speech recognition measurements
+SRTs were measured in different acoustic environments:
+- Quiet,
+- Icra1m (stationary), and
+- Icra5-250m (fluctuating).
+The noise level was 60 and 80 dB SPL for the measurements in noise.
+
+** Experiment names
+- indTIBN: Sweep/Tone in noise at individual noise levels
+- matrix: German matrix sentence test
+- indtrix: German matrix test at individual noise levels
+- NFB: Tone in notched noise experiment according to [[https://doi.org/10.1121/1.380914][Patterson (1976)]]
+- PTA: Adaptive audiogram measurement with pure tones
+- PSA: Adaptive audiogram measurement with sweeps
+- sweep: like PTA (yes, pTa), but from Marc's study
+- sweepinnoise: like TIBN (not at individual levels, and yes, Tibn, i.e. with tones), but from Marc's study
+
+** Study overlap
+- Study David includes 40 subjects
+- Study Marc includes 80 subjects
+- In total, 95 persons (not 120) participated in the studies.
+  The per study id (VPXX-E) and the overall ID (XX-E) can be found in =overlap-subjects.txt=
+
+** Dir structure
+*** Study Marc
+#+begin_src bash :results none
+tree -L 2 study-marc
+#+end_src
+#+begin_src org
+study-marc
+├── 2019H026_STD-Diagnostik_anonymisiert.xlsx  -> HZ Diagnostik file
+├── collected-results-study-marc.txt           -> collected results
+├── data                                       -> rawest data
+│   ├── VP01-l                                 -> tracks, threshold, corrections, ...
+│   ├── VP02-r
+│   ├── VP03-r
+│   ├── ...
+#+end_src
+
+*** Study David
+#+begin_src bash :results none
+tree -L 2 study-david
+#+end_src
+#+begin_src org
+study-david
+├── 2019H044_STD-Diagnostik_Extern.xlsx        -> HZ Diagnostik file
+├── collected-results-study-david.txt          -> collected results
+└── data                                       -> rawest data
+    ├── VP01-l                                 -> tracks, threshold, corrections, ...
+    ├── VP02-l
+    ├── VP03-r
+    ├── ...
+#+end_src
+
+* Refined
+** Collected results
+A combined table of both studies can is located in =refined=.
+It is rather lengthy, here are some abbreviations:
+ | ID   | global subject ID                                   |
+ | m_*  | measurements from study-marc                        |
+ | d_*  | measurements from study-david                       |
+ | A    | Tone audiogram measured with SIAM                   |
+ | AG   | Clinical Audiogram                                  |
+ | AGE  | age                                                 |
+ | BIS  | Bisgaard profile                                    |
+ | VP   | subjects labeled as in the study-* dirs             |
+ | MAT  | matrix tests                                        |
+ | iMAT | matrix tests performed at individual noise levels   |
+ | SIN  | Sweep/Tone in Noise                                 |
+ | iSIN | Sweep/Tone in Noise at individual noise levels      |
+ | NW05 | 10 dB Notch Width for a center frequency of 500 Hz  |
+ | NW10 | 10 dB Notch Width for a center frequency of 1000 Hz |
+ | SA   | Audiogram measured with sweeps                      |
+ | TINN | Tone in Notched Noise experiment                    |
+
+The last fields of each column name refer to the condition (e.g., =i5.250,60= is icra5-250m presented at 60 dB SPL) which was used to generate the stimuli, whether the condition was TRaining, testing, or REtesting, and the unit of the column content (e.g., SNR, SPL, Hz).
+
+* FADE Simulations (data not included & not published)
+I ran some FADE simulations for the SRTs measured in study-david.
+Hearing impairment was implemented using...
+- The absolute hearing thresholds from the (1) clinical audiogram, the (2) tone in quiet measurement, or (3) the sweep audiogram
+- A supra-threshold level uncertainty inferred from the sweep/tone in noise measurements (see [[https://doi.org/10.1177%2F2331216520938929][Schädler et al. (2020)]] to learn more about inference)
+- A spectral resolution parameter inferred from the tone in notched noise measurements (see [[https://doi.org/10.1016/j.heares.2020.107995][Hülsmeier et al. (2020)]])
+The simulations indicate, that an adaptivly measured audiogram + the supra threshold level uncertainty yield highly accurate outcomes.
+Accounting for the spectral resolution does not improve the simulations.
+#+caption: FADE simulation results for study-david data
+#+attr_html: :alt  :align left :class img
+[[./figures/fade-simulations-study-david.png]]
+
+I ran similar simulations for the SRTs of study-marc, but I had no data to infer the spectral resolution.
+#+caption: FADE simulation results for study-marc data
+#+attr_html: :alt  :align left :class img
+[[./figures/fade-simulations-study-marc.png]]
